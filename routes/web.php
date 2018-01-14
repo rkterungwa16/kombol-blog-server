@@ -26,6 +26,6 @@ Route::get('post/{id}', [
 ]);
 
 Route::post('create', [
-    'uses' => 'BlogController@postAdminCreate',
+    'uses' => 'BlogController@createPost',
     'as' => 'admin.create'
 ]);
