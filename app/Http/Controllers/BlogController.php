@@ -98,8 +98,33 @@ class BlogController extends Controller
         ]);
 
         return response()->json(['success' => true,
-            'message' => 'The blog post has been created',
-            'post' => $editedPost
+            'message' => 'The blog post has been edited'
+        ]);
+    }
+
+    /**
+     * Delete a created blog post
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deletePost(Request $request, $postId)
+    {
+
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+          return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user_id = $user->id;
+
+        $post = new Post();
+        $postToDelete = $post->where([
+            ['user_id', '=', $user_id],
+            ['id', '=', $postId],
+        ])->delete();
+
+        return response()->json(['success' => true,
+            'message' => 'The blog post has been deleted'
         ]);
     }
 

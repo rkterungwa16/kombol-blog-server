@@ -19,6 +19,7 @@ Route::post('blog/post', 'BlogController@createPost');
 Route::post('post/like/{postId}/', 'BlogController@likePost');
 Route::get('post/likes/{postId}/', 'BlogController@getPostLikes');
 Route::patch('blog/post/{postId}', 'BlogController@editPost');
+Route::delete('blog/post/{postId}', 'BlogController@deletePost');
 
 Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@login');
