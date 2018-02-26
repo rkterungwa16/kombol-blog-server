@@ -48,6 +48,13 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function generateToken()
+    {
+        $this->remember_token = str_random(60);
+        $this->save();
+        return $this->remember_token;
+    }
+
     public function blogPosts()
     {
         return $this->hasMany('App\Models\Post');
