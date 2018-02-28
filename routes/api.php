@@ -22,6 +22,7 @@ Route::patch('blog/post/{postId}', 'BlogController@editPost');
 Route::delete('blog/post/{postId}', 'BlogController@deletePost');
 Route::post('post/comment/{postId}', 'BlogController@commentOnAPost');
 Route::get('post/comments/{postId}', 'BlogController@getCommentsOnAPost');
+Route::get('all-posts', 'BlogController@getAllPosts');
 
 Route::post('register', 'UserController@register');
 Route::post('login', 'UserController@login');

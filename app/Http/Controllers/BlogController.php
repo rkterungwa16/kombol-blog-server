@@ -17,7 +17,7 @@ class BlogController extends Controller
 
   public function __construct()
     {
-        $this->middleware('jwt.auth');
+        $this->middleware('jwt.auth', ['except' => 'getAllPosts']);
     }
   /**
      * Get posts for a user
@@ -32,8 +32,10 @@ class BlogController extends Controller
         }
 
         $user_id = $user->id;
-        $posts = User::find($user_id)->blogPosts;
-        return $posts;
+
+        $user = User::where("id", $user_id)->first();
+        $userPost = $user->blogPosts()->where('user_id', $user_id)->get();
+        return $userPost;
     }
 
     /**
@@ -246,6 +248,19 @@ class BlogController extends Controller
         }
 
         return response()->json(['message' => 'Success', 'post_comments' => $comments], 200);
+    }
+
+    /**
+     * Get All posts created
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAllPosts(Request $request)
+    {
+        $all_posts = Post::all();
+
+        return response()->json(['message' => 'Success', 'all_posts' => $all_posts], 200);
     }
 
 }
