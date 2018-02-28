@@ -15,6 +15,10 @@ use DB, Hash;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('jwt.auth', ['only' => ['getUser']]);
+    }
     
      /**
      * API Register
@@ -98,6 +102,24 @@ class UserController extends Controller
                     ]
             ]
         );
+    }
+
+    /**
+     * Get current user
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getUser(Request $request) 
+    {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+    
+        $user_id = $user->id;
+        $user= User::where("id", "=", $user_id)->first();
+
+        return response()->json(['success' => true, 'user' => $user]);
     }
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Like;
+use App\Models\Comment;
 
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -16,9 +17,7 @@ class BlogController extends Controller
 
   public function __construct()
     {
-        $this->middleware('jwt.auth', ['only', [
-          'createPost', 'likePost'
-        ]]);
+        $this->middleware('jwt.auth');
     }
   /**
      * Get posts for a user
@@ -179,12 +178,74 @@ class BlogController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getPostLikes(Request $request, $postId) {
+    public function getPostLikes(Request $request, $postId) 
+    {
 
         $post = Post::where("id", $postId)->first();
-        $posts = $post->likes()->where('likes.post_id', $postId)->get();
+        $likesOnAPost = $post->likes()->where('likes.post_id', $postId)->get();
 
-        return response()->json(['message' => 'Success', 'post_likes' => $posts], 200);
+        return response()->json(['message' => 'Success', 'post_likes' => $likesOnAPost], 200);
        
     }
+
+    /**
+     * Comment on a post
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function commentOnAPost(Request $request, $postId) 
+    {
+
+        $this->validate($request, [
+            'comment' => 'required|min:5'
+        ]);
+
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+    
+        $user_id = $user->id; 
+        
+        $comment = new Comment();
+
+        Comment::create([
+            'post_id' => $postId,
+            'user_id' => $user_id,
+            'comment' => $request->input('comment'),
+        ]);
+
+        return response()->json(['success' => true,
+            'message' => 'Comment has been created'
+        ]);
+
+    }
+
+    /**
+     * Get Comments on a post
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getCommentsOnAPost(Request $request, $postId)
+    {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+    
+        $user_id = $user->id; 
+        $comments = Comment::where("post_id", "=", $postId)->get();
+        $post = Post::where("id", $postId)->first();
+        $userComments = $post->comments()->where('comments.post_id', $postId)->get();
+
+        foreach ($comments as $key => $value) {
+            $value["username"] = $userComments[$key]->username;
+            $value["email"] = $userComments[$key]->email;
+        }
+
+        return response()->json(['message' => 'Success', 'post_comments' => $comments], 200);
+    }
+
 }
