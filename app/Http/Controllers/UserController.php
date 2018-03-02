@@ -141,6 +141,13 @@ class UserController extends Controller
         }
 
         $user_id = $user->id;
+
+        if ($user_id == $userId) {
+            return response()->json([
+                "success" => false,
+                "message" => "You can not follow yourself"
+            ]);
+        }
         
         $user= User::where("id", "=", $userId)->first();
 
@@ -157,7 +164,7 @@ class UserController extends Controller
                 ['follower_id', '=', $user_id],
             ])->delete();
             return response()->json([
-                'success' => true,
+                'success' => false,
                 'current user unfollowed target user'], 200);
         }
 
@@ -210,6 +217,42 @@ class UserController extends Controller
         return response()->json([
             "success" => true,
             "followers" => $userFollowing
+        ]);
+    }
+
+    /**
+     * Check if current user is following a user
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function currentUserIsFollowingUser(Request $request, $userId) {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+
+        $user_id = $user->id;
+        if ($user_id == $userId) {
+            return response()->json([
+                "success" => false,
+                "message" => "You can not follow yourself"
+            ]);
+        }
+
+        $isFollowing= Following::where([
+            ["user_id", "=", $userId],
+            ["follower_id", "=", $user_id]
+        ])->first();
+        
+        if ($isFollowing == null) {
+            return response()->json([
+                "success" => false,
+                "message" => "You do not follow userId"
+            ]);
+        }
+
+        return response()->json([
+            "success" => true,
+            "followers" => $isFollowing
         ]);
     }
 

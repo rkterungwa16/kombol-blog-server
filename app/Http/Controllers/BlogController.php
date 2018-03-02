@@ -34,7 +34,7 @@ class BlogController extends Controller
         $user_id = $user->id;
 
         $user = User::where("id", $user_id)->first();
-        $userPost = $user->blogPosts()->where('user_id', $user_id)->get();
+        $userPost = $user->blogPosts()->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         return $userPost;
     }
 
@@ -46,12 +46,6 @@ class BlogController extends Controller
      */
     public function getOnePost(Request $request, $postId)
     {
-
-        // try {
-        //     $token = $this->auth->parseToken()->refresh();
-        // } catch (JWTException $e) {
-        //     throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());
-        // }
         $post = Post::where("id", $postId)->first();   
         return response()->json(["success" => true, "post" => $post]);
     }
@@ -277,7 +271,7 @@ class BlogController extends Controller
      */
     public function getAllPosts(Request $request)
     {
-        $all_posts = Post::all();
+        $all_posts = Post::orderBy('created_at', 'desc')->get();
 
         return response()->json(['message' => 'Success', 'all_posts' => $all_posts], 200);
     }

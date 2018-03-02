@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-
 Route::get("blog/posts", "BlogController@getAllUserPosts");
 Route::post("blog/post", "BlogController@createPost");
 Route::post("post/like/{postId}/", "BlogController@likePost");
@@ -26,6 +25,7 @@ Route::get("all-posts", "BlogController@getAllPosts");
 Route::get("post/{postId}", "BlogController@getOnePost");
 
 Route::post("user/follow/{userId}", "UserController@followUser");
+Route::get("user/is-following/{userId}", "UserController@currentUserIsFollowingUser");
 Route::get("user/followers", "UserController@getAllUserFollowers");
 Route::get("user/following", "UserController@getAllUserFollowing");
 Route::post("register", "UserController@register");
