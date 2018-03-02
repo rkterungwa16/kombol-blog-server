@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\Like;
+use App\Models\Following;
 
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -17,7 +18,12 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('jwt.auth', ['only' => ['getUser']]);
+        $this->middleware('jwt.auth', ['only' => 
+        [
+            'getUser',
+            'followUser',
+            'getAllUserFollowers'
+        ]]);
     }
     
      /**
@@ -120,6 +126,91 @@ class UserController extends Controller
         $user= User::where("id", "=", $user_id)->first();
 
         return response()->json(['success' => true, 'user' => $user]);
+    }
+
+    /**
+     * Follow a user
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+     public function followUser(Request $request, $userId)
+     {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+
+        $user_id = $user->id;
+        
+        $user= User::where("id", "=", $userId)->first();
+
+        $follow = new Following();
+
+        $followed = $follow->where([
+            ['user_id', '=', $userId],
+            ['follower_id', '=', $user_id],
+        ])->first();
+
+        if (is_null($followed) == false) {
+            $follow->where([
+                ['user_id', '=', $userId],
+                ['follower_id', '=', $user_id],
+            ])->delete();
+            return response()->json([
+                'success' => true,
+                'current user unfollowed target user'], 200);
+        }
+
+        $following = Following::create([
+          "user_id" => $userId,
+          "follower_id" => $user_id
+        ]);
+        
+        return response()->json([
+            "success" => true,
+            "Current user has successfully followed user"]);
+     }
+
+    /**
+     * Get all of a user's followers
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getAllUserFollowers(Request $request) {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+
+        $user_id = $user->id;
+        
+        $userFollowers= Following::where("user_id", "=", $user_id)->get();
+
+        return response()->json([
+            "success" => true,
+            "followers" => $userFollowers
+        ]);
+    }
+
+    /**
+     * Get all users current user is following
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
+    public function getAllUserFollowing(Request $request) {
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(["message" => "User not found"], 404);
+        }
+
+        $user_id = $user->id;
+        
+        $userFollowing= Following::where("follower_id", "=", $user_id)->get();
+
+        return response()->json([
+            "success" => true,
+            "followers" => $userFollowing
+        ]);
     }
 
 }

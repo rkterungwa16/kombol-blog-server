@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-  protected $fillable = ['title', 'content'];
+  protected $fillable = ['title', 'content', 'author'];
 
   public function user() 
   {
@@ -15,12 +15,11 @@ class Post extends Model
 
   public function likes()
   {
-    // return $this->hasMany('App\Models\Like');
     return $this->belongsToMany('App\Models\User', 'likes');
   }
 
   public function comments()
-    {
-        return $this->belongsToMany('App\Models\User', 'comments');
-    }
+  {
+    return $this->belongsToMany('App\Models\User', 'comments');
+  }
 }

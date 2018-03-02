@@ -39,6 +39,24 @@ class BlogController extends Controller
     }
 
     /**
+     * Get a posts 
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getOnePost(Request $request, $postId)
+    {
+
+        // try {
+        //     $token = $this->auth->parseToken()->refresh();
+        // } catch (JWTException $e) {
+        //     throw new UnauthorizedHttpException('jwt-auth', $e->getMessage(), $e, $e->getCode());
+        // }
+        $post = Post::where("id", $postId)->first();   
+        return response()->json(["success" => true, "post" => $post]);
+    }
+
+    /**
      * Create posts for a user
      *
      * @param Request $request
@@ -61,7 +79,8 @@ class BlogController extends Controller
     
         $post = new Post([
           'title' => $request->input('title'),
-          'content' => $request->input('content')
+          'content' => $request->input('content'),
+          "author" => $currentUser->username
         ]);
         
         $currentUser->blogPosts()->save($post);
