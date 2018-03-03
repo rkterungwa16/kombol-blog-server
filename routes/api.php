@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::get("/", function () {
+    return "Welcome to kombol-blog platform";
+});
 
 Route::get("blog/posts", "BlogController@getAllUserPosts");
 Route::post("blog/post", "BlogController@createPost");
