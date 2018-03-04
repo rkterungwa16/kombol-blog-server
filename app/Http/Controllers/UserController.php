@@ -76,17 +76,17 @@ class UserController extends Controller
         ];
 
         $input = $request->only('email', 'password');
-
+        
         $validator = Validator::make($input, $rules);
-
+        
         if($validator->fails()) {
             $error = $validator->messages()->toJson();
             return response()->json(['success'=> false, 'error'=> $error]);
         }
 
         $credentials = $request->only('email', 'password');
+        
         try {
-            // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(
                     ['success' => false,
@@ -95,10 +95,8 @@ class UserController extends Controller
                 );
             }
         } catch (JWTException $e) {
-            // something went wrong whilst attempting to encode the token
             return response()->json(['success' => false, 'error' => 'could_not_create_token'], 500);
         }
-        // all good so return the token
         return response()->json(
             [
                 'success' => true,
@@ -186,6 +184,7 @@ class UserController extends Controller
 
     public function getAllUserFollowers(Request $request) {
         if (!$user = JWTAuth::parseToken()->authenticate()) {
+            
             return response()->json(["message" => "User not found"], 404);
         }
 

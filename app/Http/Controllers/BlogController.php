@@ -157,7 +157,6 @@ class BlogController extends Controller
         }
     
         $user_id = $user->id; 
-        
         $like = new Like();
 
         $likedPost = $like->where([
@@ -197,6 +196,7 @@ class BlogController extends Controller
     {
 
         $post = Post::where("id", $postId)->first();
+
         $likesOnAPost = $post->likes()->where('likes.post_id', $postId)->get();
 
         return response()->json(['message' => 'Success', 'post_likes' => $likesOnAPost], 200);

@@ -16,17 +16,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         Artisan::call('migrate');
         Artisan::call('db:seed');
-
-        $user = factory(User::class)->create([
-            'email' => 'testlogin@user.com',
-            'password' => 'john123',
-        ]);
-
-        // $user = factory(User::class)->create([
-        //     "username" => "best",
-        //     "email" => "best@gmail.com",
-        //     "password" => "123456"
-        // ]);
     }
     
 }
