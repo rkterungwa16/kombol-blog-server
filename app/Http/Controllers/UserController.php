@@ -233,7 +233,7 @@ class UserController extends Controller
         $user_id = $user->id;
         if ($user_id == $userId) {
             return response()->json([
-                "success" => false,
+                "is_following" => false,
                 "message" => "You can not follow yourself"
             ]);
         }
@@ -245,13 +245,13 @@ class UserController extends Controller
         
         if ($isFollowing == null) {
             return response()->json([
-                "success" => false,
+                "is_following" => false,
                 "message" => "You do not follow userId"
             ]);
         }
 
         return response()->json([
-            "success" => true,
+            "is_following" => true,
             "followers" => $isFollowing
         ]);
     }
