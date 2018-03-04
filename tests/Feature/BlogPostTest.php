@@ -29,14 +29,6 @@ class BlogPostTest extends TestCase
      */
     public function testBasicTest()
     {
-        
-        // $user = factory(User::class)->create([
-        //     "username" => "best",
-        //     "email" => "best@gmail.com",
-        //     "password" => "123456"
-        // ]);
-
-
         $exp = Carbon::now()->timestamp + 5 * 60 * 60;
         $factory = JWTFactory::customClaims([
             'sub'   => env('API_ID'),
@@ -49,12 +41,13 @@ class BlogPostTest extends TestCase
             'password' => 'john123'
         ]);
 
+        // dd($factory);
         $payload = $factory->make();
         $token = JWTAuth::encode($payload);
         
         $headers = ['Authorization' => "Bearer $token"];
         $response = $this->get('/api/v1/blog/posts', $headers);
-        
+        // dd($response);
         $response->assertStatus(200);
     }
 
@@ -68,7 +61,6 @@ class BlogPostTest extends TestCase
         ];
 
         $response = $this->post('/api/v1/register', $payload);
-        // dd($response);
         $response->assertStatus(200);      
     }
 
@@ -85,9 +77,8 @@ class BlogPostTest extends TestCase
         ];
 
         $response = $this->post('/api/v1/login', $payload);
+        // dd($response);
         $response->assertStatus(200); 
             
-    }
-
-    
+    }   
 }
