@@ -67,7 +67,7 @@ class BlogPostTest extends TestCase
     }
     
     /**
-     * Create blog posts for authenticated user authenticated users blog posts.
+     * Create blog posts for authenticated user.
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class BlogPostTest extends TestCase
     }
 
     /**
-     * Edit blog posts for authenticated user authenticated users blog posts.
+     * Edit blog posts for authenticated user.
      *
      * @return void
      */
@@ -117,7 +117,7 @@ class BlogPostTest extends TestCase
     }
 
     /**
-     * Delete blog posts for authenticated user authenticated users blog posts.
+     * Delete blog posts for authenticated user.
      *
      * @return void
      */
@@ -142,7 +142,7 @@ class BlogPostTest extends TestCase
     }
 
     /**
-     * Like blog posts for authenticated user authenticated users blog posts.
+     * Get likes on blog posts for authenticated user.
      *
      * @return void
      */
@@ -162,7 +162,7 @@ class BlogPostTest extends TestCase
     }
 
     /**
-     * Like blog posts for authenticated user authenticated users blog posts.
+     * Like blog posts for authenticated user on blog posts.
      *
      * @return void
      */
@@ -182,7 +182,7 @@ class BlogPostTest extends TestCase
     }
 
      /**
-     * Create comments for authenticated user authenticated users blog posts.
+     * Create comments for authenticated user on blog posts.
      *
      * @return void
      */
@@ -206,7 +206,7 @@ class BlogPostTest extends TestCase
     }
 
     /**
-     * Get comments for authenticated user authenticated users blog posts.
+     * Get comments for authenticated user on blog posts.
      *
      * @return void
      */
@@ -222,6 +222,146 @@ class BlogPostTest extends TestCase
         $headers = ['Authorization' => "Bearer $token"];
 
         $response = $this->get('/api/v1/post/comments/1', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Get all posts for authenticated user.
+     *
+     * @return void
+     */
+    public function testsGettingAllPostsSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->get('/api/v1/all-posts', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Get one post for authenticated user.
+     *
+     * @return void
+     */
+    public function testsGettingOnePostSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->get('/api/v1/post/1', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Get user is following another authenticated user.
+     *
+     * @return void
+     */
+    public function testsGetUserIsFollowingSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->get('/api/v1/user/is-following/1', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Follow another authenticated user.
+     *
+     * @return void
+     */
+    public function testsFollowUserSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->post('/api/v1/user/follow/1', [], $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Get user following.
+     *
+     * @return void
+     */
+    public function testsGetUserFollowingSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->get('/api/v1/user/following/', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Get user followers.
+     *
+     * @return void
+     */
+    public function testsGetUserFollowersSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->get('/api/v1/user/followers/', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Get a user.
+     *
+     * @return void
+     */
+    public function testsGetAUserSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->get('/api/v1/user/', $headers);
         $response->assertStatus(200);
     }
 }
