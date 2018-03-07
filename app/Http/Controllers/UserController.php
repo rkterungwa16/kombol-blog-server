@@ -15,8 +15,23 @@ use Validator;
 use DB;
 use Hash;
 
+/**
+ * User controller creates user and actions that can be performed on users
+ *
+ * Some actions that can be performed on a user involves following
+ * and unfollowing a user
+ *
+ * @category Null
+ * @package  Blogging_Platform
+ * @author   Richard Terungwa Kombol <richard.kombol@andela.com>
+ * @license  Null MIT
+ * @link     Null
+ */
 class UserController extends Controller
 {
+    /**
+     * Calls the middleware to authenticate selected routes
+     */
     public function __construct()
     {
         $this->middleware(
@@ -104,7 +119,7 @@ class UserController extends Controller
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(
                     ['success' => false,
-                    'error' => 'Make sure you entered a valid email address.'],
+                    'error' => 'User does exist'],
                     401
                 );
             }

@@ -12,9 +12,23 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
 use Illuminate\Http\Request;
 
+/**
+ * Blog controller creates posts and actions that can be performed on posts
+ *
+ * Some actions that can be performed on a blog post involves liking
+ * and commenting on a post, in addition to deleting a post
+ *
+ * @category Null
+ * @package  Blogging_Platform
+ * @author   Richard Terungwa Kombol <richard.kombol@andela.com>
+ * @license  Null MIT
+ * @link     Null
+ */
 class BlogController extends Controller
 {
-
+    /**
+     * Calls the middleware to authenticate selected routes
+     */
     public function __construct()
     {
         $this->middleware('jwt.auth', ['except' => 'getAllPosts']);
@@ -256,7 +270,6 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function commentOnAPost(Request $request, $postId)
     {
 
@@ -297,7 +310,6 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function getCommentsOnAPost(Request $request, $postId)
     {
         if (!$user = JWTAuth::parseToken()->authenticate()) {
