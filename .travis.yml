@@ -1,0 +1,16 @@
+language: php
+
+php:
+    - '7.1'
+
+services:
+  - postgresql
+
+before_script:
+  - cp .env.travis .env
+  - composer self-update
+  - composer install --no-interaction
+  - psql -c 'create database blog-platform-test;' -U postgres
+
+script:
+  - vendor/bin/phpunit
