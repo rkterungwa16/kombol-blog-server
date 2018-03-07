@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -16,7 +16,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username', 'email', 'password',
     ];
 
     /**
@@ -48,8 +48,30 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function generateToken()
+    {
+        $this->remember_token = str_random(60);
+        $this->save();
+        return $this->remember_token;
+    }
+
     public function blogPosts()
     {
-        return $this->hasMany('App/Post');
+        return $this->hasMany('App\Models\Post');
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany('App\Models\Post', 'likes', 'user_id', 'post_id');
+    }
+
+    public function comments()
+    {
+        return $this->belongsToMany('App\Models\Post', 'comments', 'user_id', 'post_id');
+    }
+
+    public function followers()
+    {
+        return $this->hasMany('App\Models\Following', 'follower_id');
     }
 }
