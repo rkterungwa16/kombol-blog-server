@@ -172,12 +172,11 @@ class UserController extends Controller
      */
     public function followUser(Request $request, $userId)
     {
-        if (!$user = JWTAuth::parseToken()->authenticate()) {
+        if (!$follower = JWTAuth::parseToken()->authenticate()) {
             return response()->json(["message" => "User not found"], 404);
         }
 
-        $user_id = $user->id;
-
+        $user_id = $follower->id;
         if ($user_id == $userId) {
             return response()->json(
                 [
@@ -213,10 +212,13 @@ class UserController extends Controller
             );
         }
 
+        // dd($follower->email);
         $following = Following::create(
             [
             "user_id" => $userId,
-            "follower_id" => $user_id
+            "follower_id" => $user_id,
+            "follower_email" => $follower->email,
+            "follower_username" => $follower->username
             ]
         );
         

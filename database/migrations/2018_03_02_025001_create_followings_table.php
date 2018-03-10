@@ -18,6 +18,8 @@ class CreateFollowingsTable extends Migration
             $table->timestamps();
             $table->integer('follower_id');
             $table->integer('user_id');
+            $table->string('follower_email');
+            $table->string('follower_username');
         });
     }
 
