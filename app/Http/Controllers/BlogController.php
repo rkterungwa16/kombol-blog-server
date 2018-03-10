@@ -38,7 +38,7 @@ class BlogController extends Controller
      * Get posts for a user
      *
      * @param Request $request - request object
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAllUserPosts(Request $request)
@@ -62,7 +62,7 @@ class BlogController extends Controller
      *
      * @param Request $request - request object
      * @param Request $postId  - post Id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getOnePost(Request $request, $postId)
@@ -75,14 +75,15 @@ class BlogController extends Controller
      * Create posts for a user
      *
      * @param Request $request - request object
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function createPost(Request $request)
     {
 
         $this->validate(
-            $request, [
+            $request,
+            [
             'title' => 'required|min:5',
             'content' => 'required|min:10'
             ]
@@ -116,14 +117,15 @@ class BlogController extends Controller
      *
      * @param Request $request - request object
      * @param Request $postId  - post Id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function editPost(Request $request, $postId)
     {
         
         $this->validate(
-            $request, [
+            $request,
+            [
             'title' => 'required|min:5',
             'content' => 'required|min:10'
             ]
@@ -160,7 +162,7 @@ class BlogController extends Controller
      *
      * @param Request $request - request object
      * @param Request $postId  - post Id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function deletePost(Request $request, $postId)
@@ -193,7 +195,7 @@ class BlogController extends Controller
      *
      * @param Request $request - request object
      * @param Request $postId  - post Id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function likePost(Request $request, $postId)
@@ -224,7 +226,8 @@ class BlogController extends Controller
                 [
                 'success' => true,
                 'like' => false,
-                'user already liked this post, like deleted'], 200
+                'user already liked this post, like deleted'],
+                200
             );
         }
 
@@ -239,7 +242,8 @@ class BlogController extends Controller
             [
             'success' => true,
             'like' => true,
-            'This user liked this post'], 200
+            'This user liked this post'],
+            200
         );
     }
 
@@ -248,7 +252,7 @@ class BlogController extends Controller
      *
      * @param Request $request - request object
      * @param Request $postId  - post Id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getPostLikes(Request $request, $postId)
@@ -274,7 +278,8 @@ class BlogController extends Controller
     {
 
         $this->validate(
-            $request, [
+            $request,
+            [
             'comment' => 'required|min:5'
             ]
         );
@@ -328,7 +333,8 @@ class BlogController extends Controller
 
         return response()->json(
             [
-            'message' => 'Success', 'post_comments' => $comments], 200
+            'message' => 'Success', 'post_comments' => $comments],
+            200
         );
     }
 
@@ -336,7 +342,7 @@ class BlogController extends Controller
      * Get All posts created
      *
      * @param Request $request - request object
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAllPosts(Request $request)
@@ -345,7 +351,8 @@ class BlogController extends Controller
 
         return response()->json(
             [
-            'message' => 'Success', 'all_posts' => $all_posts], 200
+            'message' => 'Success', 'all_posts' => $all_posts],
+            200
         );
     }
 }

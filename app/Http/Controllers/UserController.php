@@ -35,7 +35,8 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware(
-            'jwt.auth', ['only' =>
+            'jwt.auth',
+            ['only' =>
             [
             'getUser',
             'followUser',
@@ -94,7 +95,7 @@ class UserController extends Controller
      * API Login, on success return JWT Auth token
      *
      * @param Request $request - request object
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
@@ -127,7 +128,8 @@ class UserController extends Controller
             return response()->json(
                 [
                 'success' => false, 'error' => 'could_not_create_token'
-                ], 500
+                ],
+                500
             );
         }
         return response()->json(
@@ -148,7 +150,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getUser(Request $request) 
+    public function getUser(Request $request)
     {
         if (!$user = JWTAuth::parseToken()->authenticate()) {
             return response()->json(["message" => "User not found"], 404);
@@ -206,7 +208,8 @@ class UserController extends Controller
             return response()->json(
                 [
                 'success' => false,
-                'current user unfollowed target user'], 200
+                'current user unfollowed target user'],
+                200
             );
         }
 
@@ -279,7 +282,7 @@ class UserController extends Controller
      *
      * @param Request $request - request object
      * @param Request $userId  - user Id
-     * 
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function currentUserIsFollowingUser(Request $request, $userId)
