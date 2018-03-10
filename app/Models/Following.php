@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Following extends Model
 {
-    protected $fillable = ['follower_id', 'user_id', 'follower_email', 'follower_username'];
+    protected $fillable = [
+        'follower_id',
+        'user_id',
+        'follower_email',
+        'follower_username',
+        'user_email',
+        'user_username'
+    ];
     public function follows()
     {
         return $this->belongsTo('App\Models\User', 'user_id');

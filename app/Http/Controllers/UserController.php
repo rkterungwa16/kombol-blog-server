@@ -212,10 +212,11 @@ class UserController extends Controller
             );
         }
 
-        // dd($follower->email);
         $following = Following::create(
             [
             "user_id" => $userId,
+            "user_username" => $user->username,
+            "user_email" => $user->email,
             "follower_id" => $user_id,
             "follower_email" => $follower->email,
             "follower_username" => $follower->username
