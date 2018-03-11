@@ -1,6 +1,7 @@
 <?php
 
 namespace Tests;
+
 use App\Models\User;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -17,5 +18,4 @@ abstract class TestCase extends BaseTestCase
         Artisan::call('migrate');
         Artisan::call('db:seed');
     }
-    
 }

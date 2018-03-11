@@ -24,6 +24,7 @@ Route::patch("blog/post/{postId}", "BlogController@editPost");
 Route::delete("blog/post/{postId}", "BlogController@deletePost");
 Route::post("post/comment/{postId}", "BlogController@commentOnAPost");
 Route::get("post/comments/{postId}", "BlogController@getCommentsOnAPost");
+Route::delete("post/comments/{commentId}", "BlogController@deleteComment");
 Route::get("all-posts", "BlogController@getAllPosts");
 Route::get("post/{postId}", "BlogController@getOnePost");
 

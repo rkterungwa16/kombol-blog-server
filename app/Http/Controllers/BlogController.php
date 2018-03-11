@@ -355,4 +355,35 @@ class BlogController extends Controller
             200
         );
     }
+
+    /**
+     * Delete a comment
+     *
+     * @param Request $request - request object
+     * @param Request $commentId  - comment Id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteComment(Request $request, $commentId)
+    {
+
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user_id = $user->id;
+
+        $comment = new Comment();
+        $postToDelete = $comment->where(
+            [
+            ['id', '=', $commentId],
+            ]
+        )->delete();
+
+        return response()->json(
+            ['success' => true,
+            'message' => 'The blog post has been deleted'
+            ]
+        );
+    }
 }

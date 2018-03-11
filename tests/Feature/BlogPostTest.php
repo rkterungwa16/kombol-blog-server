@@ -46,7 +46,7 @@ class BlogPostTest extends TestCase
         ];
 
         $response = $this->post('/api/v1/register', $payload);
-        $response->assertStatus(200);      
+        $response->assertStatus(200);
     }
 
     public function testsLoginSuccessfully()
@@ -55,7 +55,7 @@ class BlogPostTest extends TestCase
             'email' => 'rich@gmail.com',
             'password' => '654321'
         ]);
-        // dd(User::find(1));
+
         $payload = [
             'email' => 'rich@gmail.com',
             'password' => '654321'
@@ -63,7 +63,7 @@ class BlogPostTest extends TestCase
 
         $response = $this->json('POST', '/api/v1/login', $payload);
 
-        $response->assertStatus(200);   
+        $response->assertStatus(200);
     }
     
     /**
@@ -293,6 +293,7 @@ class BlogPostTest extends TestCase
     public function testsFollowUserSuccessfully()
     {
         $user = factory(User::class)->create([
+            'user' => 'john',
             'email' => 'testlogin@user.com',
             'password' => 'john123',
         ]);
@@ -362,6 +363,31 @@ class BlogPostTest extends TestCase
         $headers = ['Authorization' => "Bearer $token"];
 
         $response = $this->get('/api/v1/user/', $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Delete blog posts for authenticated user.
+     *
+     * @return void
+     */
+    public function testsDeletingAuthenticatedUsersCommentSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $post = [
+            "title" => "title",
+            "content" => "content for the tests"
+        ];
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->delete('/api/v1/post/comments/1', $post, $headers);
         $response->assertStatus(200);
     }
 }
