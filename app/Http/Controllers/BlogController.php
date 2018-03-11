@@ -382,7 +382,49 @@ class BlogController extends Controller
 
         return response()->json(
             ['success' => true,
-            'message' => 'The blog post has been deleted'
+            'message' => 'The blog post comment has been deleted'
+            ]
+        );
+    }
+
+    /**
+     * Edit a comment
+     *
+     * @param Request $request - request object
+     * @param Request $commentId  - comment Id
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function editComment(Request $request, $commentId)
+    {
+
+        if (!$user = JWTAuth::parseToken()->authenticate()) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $this->validate(
+            $request,
+            [
+            'comment' => 'required|min:5',
+            ]
+        );
+
+        $user_id = $user->id;
+
+        $comment = new Comment();
+        $editedPost = $comment->where(
+            [
+            ['id', '=', $commentId],
+            ]
+        )->update(
+            [
+                'comment' => $request->input('comment'),
+            ]
+        );
+
+        return response()->json(
+            ['success' => true,
+            'message' => 'The post comment has been edited'
             ]
         );
     }

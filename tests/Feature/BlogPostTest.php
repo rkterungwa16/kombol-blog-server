@@ -367,7 +367,7 @@ class BlogPostTest extends TestCase
     }
 
     /**
-     * Delete blog posts for authenticated user.
+     * Delete blog posts comments for authenticated user.
      *
      * @return void
      */
@@ -388,6 +388,30 @@ class BlogPostTest extends TestCase
         $headers = ['Authorization' => "Bearer $token"];
 
         $response = $this->delete('/api/v1/post/comments/1', $post, $headers);
+        $response->assertStatus(200);
+    }
+
+    /**
+     * Edit blog posts comments for authenticated user.
+     *
+     * @return void
+     */
+    public function testsEditingAuthenticatedUsersCommentSuccessfully()
+    {
+        $user = factory(User::class)->create([
+            'email' => 'testlogin@user.com',
+            'password' => 'john123',
+        ]);
+       
+        $token = JWTAuth::fromUser($user);
+
+        $comment = [
+            "comment" => "comment here",
+        ];
+
+        $headers = ['Authorization' => "Bearer $token"];
+
+        $response = $this->patch('/api/v1/post/comments/1', $comment, $headers);
         $response->assertStatus(200);
     }
 }
